@@ -17,14 +17,14 @@
         dev-catalog (build-catalog 10 50) 
         dev-lifecycles (build-lifecycles)]
     ;; Automatically pipes the data structure into the channel, attaching :done at the end
-    (sl/bind-inputs! dev-lifecycles {:in csv-inputs/input-segments})
+    (dl/bind-inputs! dev-lifecycles {:in csv-inputs/input-segments})
     (let [job {:workflow workflow
                :catalog dev-catalog
                :lifecycles dev-lifecycles
-               :flow-conditions sf/flow-conditions
+               :flow-conditions df/flow-conditions
                :task-scheduler :onyx.task-scheduler/balanced}]
       (onyx.api/submit-job peer-config job)
       ;; Automatically grab output from the stubbed core.async channels,
       ;; returning a vector of the results with data structures representing
       ;; the output.
-      (sl/collect-outputs! dev-lifecycles [:loud-output :question-output]))))
+      (dl/collect-outputs! dev-lifecycles [:loud-output :question-output]))))
